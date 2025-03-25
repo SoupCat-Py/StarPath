@@ -131,4 +131,5 @@ class laylineTab(ctk.CTkFrame):
         else:
             # show user an error
             # maybe remove this idk
+            # maybe update the button to be disabled during input validation
             msg.showinfo('error','Please make sure all the inputs are filled out :)')
