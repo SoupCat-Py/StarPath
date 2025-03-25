@@ -5,7 +5,7 @@ import math
 import tkinter.messagebox as msg
 
 # other scripts
-from var_handler import colors, tab, nms, get_image
+from var_handler import colors, tab, nms, get_image, left_click
 
 # strings for labels to make it less cluttered
 step2_text = '''
@@ -18,8 +18,7 @@ Travel at least 1000u
 Step 2:'''
 
 # TODO:
-'''- validation for inputs
-   - functionality to locate button'''
+'- validation for inputs'
 
 def calculate(lat1,lat2,long1,long2,dist):
     laylineDistance = (655*math.sqrt((lat2-lat1)**2 + (long2-long1)**2)) / dist
@@ -52,7 +51,7 @@ class resultFrame(ctk.CTkFrame):
 
         # config
         self.result_title = ctk.CTkLabel(self, text='Laylines at these longitudes:', font=(nms,20))
-        self.result_label = ctk.CTkLabel(self, text=(' \n' * 8), font=('Arial',15))
+        self.result_label = ctk.CTkLabel(self, text=('\n' * 7), font=('Arial',15))
 
         # placement
         self.result_title.grid(row=0,column=0, padx=10,pady=10, sticky='ew')
@@ -77,7 +76,7 @@ class laylineTab(ctk.CTkFrame):
         self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=250, font=(nms,30))
         #self.locate =     ctk.CTkButton(self, text='Locate', font=(nms,30), width=250, height=60, command=self.send_inputs,
         #                                image=get_image('locate',40,40), corner_radius=20)
-        self.locate =      ctk.CTkLabel(self, text='', image=get_image('locate_button',250,50))
+        self.locate =      ctk.CTkLabel(self, text='', image=get_image('locate_norm',250,50))
         self.clear =      ctk.CTkButton(self, text='Clear', command=self.clear_inputs,
                                         text_color='red', fg_color='transparent', hover_color=colors['dark'], border_width=3, border_color='red')
         #   output
@@ -98,12 +97,17 @@ class laylineTab(ctk.CTkFrame):
         self.lat2_entry.grid (row=3,column=0, padx=5,pady=10,  sticky='e')
         self.long2_entry.grid(row=3,column=1, padx=5,pady=10,  sticky='w')
         self.dist_entry.grid (row=4,column=0, padx=10,pady=10,              columnspan=2)
-        self.locate.grid     (row=5,column=0, pady=20,         sticky='ns', columnspan=2)
-        self.clear.grid      (row=6,column=0,                  sticky='ns', columnspan=2)
+        self.locate.grid     (row=6,column=0, pady=30,         sticky='ns', columnspan=2)
+        self.clear.grid      (row=5,column=0,                  sticky='ns', columnspan=2)
         #   result
-        self.result_frame.grid(row=0,column=2, padx=20,pady=20, rowspan=7)
+        self.result_frame.grid(row=0,column=2, padx=20,pady=20, rowspan=6)
         #   guide
         self.video_button.place(x=340, y=660)
+
+        # KEYBINDS
+        self.locate.bind('<Enter>', lambda e: self.locate.configure(image=get_image('locate_hov', 275,55)))
+        self.locate.bind('<Leave>', lambda e: self.locate.configure(image=get_image('locate_norm',250,50)))
+        self.locate.bind(left_click,lambda e: self.send_inputs())
 
 
     def clear_inputs(self):

@@ -1,7 +1,7 @@
 # libraries used in here
 import customtkinter as ctk     # GUI
 import tkinter as tk
-import os, sys                  # system stuff
+import os                       # system stuff
 from PIL import Image as image  # images
 from contextlib import suppress # error handling
 
@@ -61,7 +61,6 @@ class sidebarFrame(ctk.CTkFrame):
         # button bindings
         for widget in self.sidebar_buttons:                                          # for all widgets
             self.hover_bind(widget, self.widgets[widget])                            # hover/exit bind function
-            left_click = '<Button-1>' if sys.platform == 'darwin' else '<Button-0>'  # set left click for platform
             widget.bind(left_click, lambda em, w=widget: self.click(w))              # bind left click
 
 
