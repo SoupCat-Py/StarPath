@@ -63,17 +63,21 @@ class laylineTab(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
+        # VALIDATION
+        self.vc_f = self.register(self.validate_float)   # for lats and longs
+        self.vc_d = self.register(self.validate_integer) # for distance
+
         # WIDGET INIT
         #   spacer
         self.spacer = ctk.CTkLabel(self, text='', width=880, height=100)
         #   inputs
         self.step1 =       ctk.CTkLabel(self, text='Step 1:', text_color='#AAAAAA', font=(nms,20))
-        self.lat1_entry =  ctk.CTkEntry(self, placeholder_text='lat',  width=120, font=(nms,30))
-        self.long1_entry = ctk.CTkEntry(self, placeholder_text='long', width=120, font=(nms,30))
+        self.lat1_entry =  ctk.CTkEntry(self, placeholder_text='lat',  width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.long1_entry = ctk.CTkEntry(self, placeholder_text='long', width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
         self.step2 =       ctk.CTkLabel(self, text=step2_text, text_color='#AAAAAA', font=(nms,20))
-        self.lat2_entry =  ctk.CTkEntry(self, placeholder_text='lat',  width=120, font=(nms,30))
-        self.long2_entry = ctk.CTkEntry(self, placeholder_text='long', width=120, font=(nms,30))
-        self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=250, font=(nms,30))
+        self.lat2_entry =  ctk.CTkEntry(self, placeholder_text='lat',  width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.long2_entry = ctk.CTkEntry(self, placeholder_text='long', width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=250, font=(nms,30), validate='key', validatecommand=(self.vc_d,'%P'))
         #self.locate =     ctk.CTkButton(self, text='Locate', font=(nms,30), width=250, height=60, command=self.send_inputs,
         #                                image=get_image('locate',40,40), corner_radius=20)
         self.locate =      ctk.CTkLabel(self, text='', image=get_image('locate_norm',250,50))
@@ -81,7 +85,8 @@ class laylineTab(ctk.CTkFrame):
                                         text_color='red', fg_color='transparent', hover_color=colors['dark'], border_width=3, border_color='red')
         #   output
         self.result_frame = resultFrame(self)
-        #   guide
+        #   other
+        self.nmslc_button = ctk.CTkLabel(self, text='', image=get_image('nmslc_norm',70,70), width=0, height=0)
         self.video_button = ctk.CTkButton(self, text='Video Guide', width=200,
                                           fg_color=colors['main'], hover_color=colors['dark'], image=get_image('yt',30,30), corner_radius=50,
                                           command=lambda e: web.open_new_tab('https://www.youtube.com/watch?v=Ec8QN39GNB8'))
@@ -101,20 +106,54 @@ class laylineTab(ctk.CTkFrame):
         self.clear.grid      (row=5,column=0,                  sticky='ns', columnspan=2)
         #   result
         self.result_frame.grid(row=0,column=2, padx=20,pady=20, rowspan=6)
-        #   guide
+        #   other
+        self.nmslc_button.place(x=800, y=640)
         self.video_button.place(x=340, y=660)
 
         # KEYBINDS
-        self.locate.bind('<Enter>', lambda e: self.locate.configure(image=get_image('locate_hov', 275,55)))
-        self.locate.bind('<Leave>', lambda e: self.locate.configure(image=get_image('locate_norm',250,50)))
-        self.locate.bind(left_click,lambda e: self.send_inputs())
+        self.locate.bind('<Enter>',  lambda e: self.locate.configure(image=get_image('locate_hov', 275,55)))
+        self.locate.bind('<Leave>',  lambda e: self.locate.configure(image=get_image('locate_norm',250,50)))
+        self.locate.bind(left_click, lambda e: self.send_inputs())
+        #
+        self.nmslc_button.bind('<Enter>',  lambda e: self.nmslc_button.configure(image=get_image('nmslc_hov',70,70)))
+        self.nmslc_button.bind('<Leave>',  lambda e: self.nmslc_button.configure(image=get_image('nmslc_norm',70,70)))
+        self.nmslc_button.bind(left_click, lambda e: web.open_new_tab('https://github.com/SoupCat-Py/NMS-Layline-Calculator'))
 
+
+    def validate_integer(self,input):
+        # check for digit and make sure it fits in the entry
+        if input.isdigit() and int(input) < 99999999999999:
+            return True
+            # check all inputs for live update
+        # check for blank or placeholder
+        elif input == '' or input == 'distance':
+            return True
+        return False
+    
+    def validate_float(self, input, widget):
+        # check for lone hyphen, blank, placeholder
+        if input == '-' or input == '' or input in ['lat','long']:
+            return True
+        else:
+            # check for float
+            try:
+                float(input)
+                # check for range
+                # -90 to 90 for lat, -180 to 180 for long
+                if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:
+                    return True if float(input) >= -90 and float(input) <= 90 else False
+                elif widget in [f'{self.long1_entry}.!entry', f'{self.long2_entry}.!entry']:
+                    return True if float(input) >= -180 and float(input) <= 180 else False
+            except ValueError:
+                return False
+        return False
 
     def clear_inputs(self):
         # check all inputs
         for input in [self.lat1_entry,self.lat2_entry,self.long1_entry,self.long2_entry,self.dist_entry]:
             # clear if not empty to keep placeholder
             input.delete(0,ctk.END) if input.get() != '' else None
+
 
     def send_inputs(self):
         # get values
