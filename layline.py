@@ -17,6 +17,9 @@ Travel at least 1000u
 
 Step 2:'''
 
+# gradient from red to grey
+fade = ["#ff0000", "#ff0000", "#ff0000", "#ff0000", "#ff0000", "#ff0000", "#f2281d", "#d94436", "#bf5447", "#a45e54", "#88655f", "#696969"]
+
 
 
 def calculate(lat1,lat2,long1,long2,dist):
@@ -76,12 +79,12 @@ class laylineTab(ctk.CTkFrame):
         self.spacer = ctk.CTkLabel(self, text='', width=880, height=100)
         #   inputs
         self.step1 =       ctk.CTkLabel(self, text='Step 1:', text_color='#AAAAAA', font=(nms,20))
-        self.lat1_entry =  ctk.CTkEntry(self, placeholder_text='lat',  width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
-        self.long1_entry = ctk.CTkEntry(self, placeholder_text='long', width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.lat1_entry =  ctk.CTkEntry(self, placeholder_text='lat',      width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.long1_entry = ctk.CTkEntry(self, placeholder_text='long',     width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
         self.step2 =       ctk.CTkLabel(self, text=step2_text, text_color='#AAAAAA', font=(nms,20))
-        self.lat2_entry =  ctk.CTkEntry(self, placeholder_text='lat',  width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
-        self.long2_entry = ctk.CTkEntry(self, placeholder_text='long', width=120, font=(nms,30), validate='key', validatecommand=(self.vc_f,'%P','%W'))
-        self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=250, font=(nms,30), validate='key', validatecommand=(self.vc_d,'%P'))
+        self.lat2_entry =  ctk.CTkEntry(self, placeholder_text='lat',      width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.long2_entry = ctk.CTkEntry(self, placeholder_text='long',     width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=270, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_d,'%P'))
         #self.locate =     ctk.CTkButton(self, text='Locate', font=(nms,30), width=250, height=60, command=self.send_inputs,
         #                                image=get_image('locate',40,40), corner_radius=20)
         self.locate =      ctk.CTkLabel(self, text='', image=get_image('locate_norm',250,50))
@@ -94,6 +97,7 @@ class laylineTab(ctk.CTkFrame):
         self.video_button = ctk.CTkButton(self, text='Video Guide', width=200, height=40,
                                           fg_color=colors['main'], hover_color=colors['dark'], image=get_image('yt',30,30), corner_radius=50,
                                           command=lambda e: web.open_new_tab('https://www.youtube.com/watch?v=Ec8QN39GNB8'))
+        
 
         # WIDGET PLACEMENT
         #   spacer
@@ -140,23 +144,39 @@ class laylineTab(ctk.CTkFrame):
         else:
             # check for float
             try:
-                float(input)
+                input = float(input)
                 # check for range
                 # -90 to 90 for lat, -180 to 180 for long
                 if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:
-                    return True if float(input) >= -90 and float(input) <= 90 else False
+                    self.glow_red(widget) if input < -90 or input > 90 else None
+                    return True if input >= -90 and input <= 90 else False
                 elif widget in [f'{self.long1_entry}.!entry', f'{self.long2_entry}.!entry']:
-                    return True if float(input) >= -180 and float(input) <= 180 else False
+                    self.glow_red(widget) if input > 180 or input < -180 else None
+                    return True if input >= -180 and input <= 180 else False
             except ValueError:
                 return False
         return False
+    
+
+    def fade_back(self, entry):
+        if self.fade_stage < len(fade):
+            entry.configure(border_color=fade[self.fade_stage])
+            self.fade_stage += 1
+            entry.after(50, lambda: self.fade_back(entry))
+    
+    def glow_red(self, input_entry):
+        entry_name = self.nametowidget(input_entry)  # get name of focused entry - from string to widget
+        parent_entry = entry_name.winfo_parent()     # get parent of the new widget - remove .!entry
+        entry = self.nametowidget(parent_entry)      # get name of parent entry
+
+        self.fade_stage = 0                    # set starting point for fade_back
+        self.fade_back(entry)                  # start the fading loop
 
     def clear_inputs(self):
         # check all inputs
         for input in [self.lat1_entry,self.lat2_entry,self.long1_entry,self.long2_entry,self.dist_entry]:
             # clear if not empty to keep placeholder
             input.delete(0,ctk.END) if input.get() != '' else None
-
 
     def send_inputs(self):
         # get values
