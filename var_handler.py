@@ -3,10 +3,10 @@ from PIL import Image as image
 import os, sys
 
 colors = {
-    'main'   : '#d80000',   # main red - sidebar bg
+    'main'   : '#d80000',   # main red
     'accent' : '#c20404',   # accent red - button norm
     'light'  : '#f82121',   # light red - button hov
-    'dark'   : '#9d0202'    # dark red - button sel
+    'dark'   : '#9d0202',   # dark red - button sel
 }
 
 # set image files in one line
@@ -19,6 +19,6 @@ def get_image(name, w,h):
 left_click = '<Button-1>' if sys.platform == 'darwin' else '<Button-0>'
 
 nms = 'GeosansLight-NMS'
-tab = 0
+tab = 'main'
 
 # store other variables here such as logged coords
