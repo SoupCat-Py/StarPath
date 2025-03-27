@@ -23,25 +23,28 @@ fade = ["#ff0000", "#ff0000", "#ff0000", "#ff0000", "#ff0000", "#ff0000", "#f228
 
 
 def calculate(lat1,lat2,long1,long2,dist):
+    # magic formula
     laylineDistance = (655*math.sqrt((lat2-lat1)**2 + (long2-long1)**2)) / dist
 
+    # get actual laylines
     angles = [-90, 0, 90, 180]
     listAdd = [angle + (laylineDistance/2) for angle in angles]
     listSubtract = [angle - (laylineDistance/2) for angle in angles]
 
+    # combine
     listResult = listAdd + listSubtract
 
+    # check for out of range
     for i in range (len(listResult)):
         if listResult[i] > 180:
             listResult[i] -= 360
         if listResult[i] < -180:
             listResult[i] += 360
+        # round
         listResult[i] = round(listResult[i], 2)
 
+    # cleanup and return
     listResult.sort()
-    verticalResult = "\n".join(map(str, listResult))
-
-    # Format the result into a vertical string
     verticalResult = "\n".join(map(str, listResult))
     return verticalResult
 
@@ -147,12 +150,12 @@ class laylineTab(ctk.CTkFrame):
                 input = float(input)
                 # check for range
                 # -90 to 90 for lat, -180 to 180 for long
-                if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:
-                    self.glow_red(widget) if input < -90 or input > 90 else None
-                    return True if input >= -90 and input <= 90 else False
-                elif widget in [f'{self.long1_entry}.!entry', f'{self.long2_entry}.!entry']:
-                    self.glow_red(widget) if input > 180 or input < -180 else None
-                    return True if input >= -180 and input <= 180 else False
+                if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:      # lat
+                    self.glow_red(widget) if input < -90 or input > 90 else None              # initiate glow if out of range
+                    return True if input >= -90 and input <= 90 else False                    # return true if in range - false if out
+                elif widget in [f'{self.long1_entry}.!entry', f'{self.long2_entry}.!entry']:  # long
+                    self.glow_red(widget) if input > 180 or input < -180 else None            # initiate glow if out of range
+                    return True if input >= -180 and input <= 180 else False                  # return true if in range - false if not
             except ValueError:
                 return False
         return False
