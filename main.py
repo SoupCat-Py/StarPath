@@ -77,6 +77,7 @@ class sidebarFrame(ctk.CTkFrame):
             mode = 'sel' if widget == target else 'norm'                                   # set mode for image - used to remove repitition
             widget.configure(image=get_image(f'{self.widgets[widget]}_{mode}', 180,60))    # change image
         self.master.switch_tab(self.widgets[target])
+        self.sidebar_title.focus_set() if widget != target else None
 
 
 class main(ctk.CTk):
