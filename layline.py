@@ -49,13 +49,18 @@ class resultFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
+        # frame config
+        self._corner_radius=25
+        self._border_color=colors['main']
+        self._border_width=4
+
         # config
-        self.result_title = ctk.CTkLabel(self, text='Laylines at these longitudes:', font=(nms,20))
-        self.result_label = ctk.CTkLabel(self, text=('\n' * 7), font=('Arial',15))
+        self.result_title = ctk.CTkLabel(self, text='Laylines at these longitudes:', font=(nms,30))
+        self.result_label = ctk.CTkLabel(self, text=('\n' * 7), font=('Arial',25))
 
         # placement
-        self.result_title.grid(row=0,column=0, padx=10,pady=10, sticky='ew')
-        self.result_label.grid(row=1,column=0, padx=10,pady=20,  sticky='nsew')
+        self.result_title.grid(row=0,column=0, padx=20,pady=20, sticky='ew')
+        self.result_label.grid(row=1,column=0, padx=10,pady=20, sticky='nsew')
 
 
 # main frame for layline tab
@@ -87,7 +92,7 @@ class laylineTab(ctk.CTkFrame):
         self.result_frame = resultFrame(self)
         #   other
         self.nmslc_button = ctk.CTkLabel(self, text='', image=get_image('nmslc_norm',70,70), width=0, height=0)
-        self.video_button = ctk.CTkButton(self, text='Video Guide', width=200,
+        self.video_button = ctk.CTkButton(self, text='Video Guide', width=200, height=40,
                                           fg_color=colors['main'], hover_color=colors['dark'], image=get_image('yt',30,30), corner_radius=50,
                                           command=lambda e: web.open_new_tab('https://www.youtube.com/watch?v=Ec8QN39GNB8'))
 
@@ -102,16 +107,16 @@ class laylineTab(ctk.CTkFrame):
         self.lat2_entry.grid (row=3,column=0, padx=5,pady=10,  sticky='e')
         self.long2_entry.grid(row=3,column=1, padx=5,pady=10,  sticky='w')
         self.dist_entry.grid (row=4,column=0, padx=10,pady=10,              columnspan=2)
-        self.locate.grid     (row=6,column=0, pady=30,         sticky='ns', columnspan=2)
+        self.locate.grid     (row=6,column=0, pady=40,         sticky='ns', columnspan=2)
         self.clear.grid      (row=5,column=0,                  sticky='ns', columnspan=2)
         #   result
-        self.result_frame.grid(row=0,column=2, padx=20,pady=20, rowspan=6)
+        self.result_frame.grid(row=1,column=2, padx=20,pady=20, rowspan=5)
         #   other
         self.nmslc_button.place(x=800, y=640)
-        self.video_button.place(x=340, y=660)
+        self.video_button.place(x=590, y=655)
 
         # KEYBINDS
-        self.locate.bind('<Enter>',  lambda e: self.locate.configure(image=get_image('locate_hov', 275,55)))
+        self.locate.bind('<Enter>',  lambda e: self.locate.configure(image=get_image('locate_hov', 250,50)))
         self.locate.bind('<Leave>',  lambda e: self.locate.configure(image=get_image('locate_norm',250,50)))
         self.locate.bind(left_click, lambda e: self.send_inputs())
         #
