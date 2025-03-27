@@ -7,7 +7,7 @@ import tkinter.messagebox as msg
 # other scripts
 from var_handler import colors, tab, nms, get_image, left_click
 
-# strings for labels to make it less cluttered
+# string for step 2 to make it less cluttered
 step2_text = '''
 ⬇
 
@@ -17,8 +17,7 @@ Travel at least 1000u
 
 Step 2:'''
 
-# TODO:
-'- validation for inputs'
+
 
 def calculate(lat1,lat2,long1,long2,dist):
     laylineDistance = (655*math.sqrt((lat2-lat1)**2 + (long2-long1)**2)) / dist
@@ -129,7 +128,6 @@ class laylineTab(ctk.CTkFrame):
         # check for digit and make sure it fits in the entry
         if input.isdigit() and int(input) < 99999999999999:
             return True
-            # check all inputs for live update
         # check for blank or placeholder
         elif input == '' or input == 'distance':
             return True
@@ -174,6 +172,4 @@ class laylineTab(ctk.CTkFrame):
             self.result_frame.result_label.configure(text=calculate(float(lat1_temp), float(lat2_temp), float(long1_temp), float(long2_temp), float(dist_temp)))
         else:
             # show user an error
-            # maybe remove this idk
-            # maybe update the button to be disabled during input validation
             msg.showinfo('error','Please make sure all the inputs are filled out :)')
