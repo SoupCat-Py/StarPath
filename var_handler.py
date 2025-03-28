@@ -19,6 +19,6 @@ def get_image(name, w,h):
 left_click = '<Button-1>' if sys.platform == 'darwin' else '<Button-0>'
 
 nms = 'GeosansLight-NMS'
-tab = 'main'
+tab = 'Main'
 
 # store other variables here such as logged coords

@@ -3,6 +3,7 @@ import customtkinter as ctk
 import webbrowser as web
 import math
 import tkinter.messagebox as msg
+from decimal import Decimal
 
 # other scripts
 from var_handler import colors, tab, nms, get_image, left_click
@@ -148,6 +149,12 @@ class laylineTab(ctk.CTkFrame):
             # check for float
             try:
                 input = float(input)
+
+                # check for decimal precision
+                decimal = Decimal(str(input))
+                if abs(decimal.as_tuple().exponent) > 2:
+                    self.glow_red(widget)
+                    return False
                 # check for range
                 # -90 to 90 for lat, -180 to 180 for long
                 if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:      # lat

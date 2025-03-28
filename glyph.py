@@ -3,7 +3,7 @@ import customtkinter as ctk
 import webbrowser as web
 
 # other scripts
-from var_handler import colors, nms
+from var_handler import colors, nms, get_image
 from layline import fade
 
 class fromHex(ctk.CTkFrame):
@@ -17,9 +17,19 @@ class fromHex(ctk.CTkFrame):
         # WIDGET INIT
         self.hex_input=ctk.CTkEntry(self, placeholder_text='input hex', font=(nms,30), width=220, height=50,
                                     validate='key', validatecommand=(self.vc_h,'%P','%W'))
-
+        self.glyph_output_label = ctk.CTkLabel(self, text='Portal Address: ', font=(nms,20))
+        
         # WIDGET PLACEMENT
-        self.hex_input.grid(row=0,column=0, padx=20,pady=20)
+        self.hex_input.grid(row=0,column=0, padx=20,pady=20, columnspan=13)
+        self.glyph_output_label.grid(row=1,column=0, padx=15,pady=20)
+
+        # special init and placement for glyphs
+        self.glyph_output_dict = {}
+        for i in range(12):
+            output_name = f'glyph_output_{i}'
+            self.glyph_output_dict[output_name] = ctk.CTkLabel(self, text='', image=get_image('portalnone',40,40))
+            self.glyph_output_dict[output_name].grid(row=1, column=i+1, padx=5,pady=5)
+
 
     def validate_hex(self, input, entry):
         # check for blank or placeholder
@@ -28,11 +38,16 @@ class fromHex(ctk.CTkFrame):
         # check for hex
         elif input[len(input)-1] in '1234567890ABCDEFabcdef':
             # check for length
-            if len(input) > 12:
+            if len(input) > 12:   # show user if limit is reached
                 self.glow_red(entry)
                 return False
-            else:
-                # update
+            else:   # update
+                if len(input) > 0:
+                    glyph = (input[-1:]).lower()    # get the lowercase last character
+                    target_image = f'portal{glyph}' # get the image needed
+                    target_widget_name = f'glyph_output_{len(input)-1}'          # get the name of target widget
+                    target_widget = self.glyph_output_dict[target_widget_name]   # get target widget itself
+                    target_widget.configure(text='', image=get_image(target_image,40,40)) # change image
                 return True
         return False
     

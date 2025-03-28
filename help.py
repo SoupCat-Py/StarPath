@@ -21,12 +21,12 @@ class tabGroup(ctk.CTkTabview):
                        border_color=colors['main'])
 
         # add/set tabs
-        tab_list = ['main','Solar','Layline','Glyph','Log']
+        tab_list = ['Main','Solar','Layline','Glyph','Log']
         for tab in tab_list:
             self.add(tab)
         self.set(set_tab)
 
-        self.destroy_button = ctk.CTkButton(master=self.tab('null'), text='destroy', command=destroy_help_window)
+        self.destroy_button = ctk.CTkButton(master=self.tab('Main'), text='destroy', command=destroy_help_window)
         self.destroy_button.grid(row=0,column=0, padx=10,pady=10)
 
 class helpWindow(ctk.CTkToplevel):
