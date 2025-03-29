@@ -3,10 +3,10 @@ import customtkinter as ctk     # GUI
 import tkinter as tk
 import os                       # system stuff
 from PIL import Image as image  # images
+import webbrowser as web        # opening wiki
 
 # import from other scripts
 from var_handler import *
-from help import open_help_window, destroy_help_window
 from solar import solarTab
 from layline import laylineTab
 from glyph import glyphTab
@@ -33,7 +33,7 @@ class sidebarFrame(ctk.CTkFrame):
         self.layline_button = ctk.CTkLabel(self, text='', image=get_image('layline_norm', 180,60))
         self.glyph_button =   ctk.CTkLabel(self, text='', image=get_image('glyph_norm', 180,60))
         self.log_button =     ctk.CTkLabel(self, text='', image=get_image('log_norm', 180,60))
-        self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command = lambda: open_help_window(self),
+        self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command = lambda: web.open_new_tab('https://github.com/SoupCat-Py/NMStools/wiki'),
                                             fg_color=colors['main'], hover_color=colors['accent'], corner_radius=10)
         self.version =        ctk.CTkLabel(self, text='v0.0.0', font=(nms,15))
 
