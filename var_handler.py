@@ -7,6 +7,8 @@ colors = {
     'accent' : '#c20404',   # accent red - button norm
     'light'  : '#f82121',   # light red - button hov
     'dark'   : '#9d0202',   # dark red - button sel
+    'blue-m' : '#036ffc',   # main blue - copy button
+    'blue-h' : '#083b80'    # hover blue - copy button
 }
 
 # set image files in one line

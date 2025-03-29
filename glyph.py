@@ -1,6 +1,7 @@
 # libraries used here
 import customtkinter as ctk
 import webbrowser as web
+import pyperclip as ppc
 
 # other scripts
 from var_handler import colors, nms, get_image
@@ -19,12 +20,15 @@ class fromHex(ctk.CTkFrame):
                                     validate='key', validatecommand=(self.vc_h,'%P', '%s','%S','%W'))
         self.clear_button = ctk.CTkButton(self, text='Clear', text_color=colors['main'], width=70, command=self.clear_all,
                                         fg_color='transparent', border_width=2, border_color=colors['main'], hover_color=colors['dark'])
+        self.copy_button = ctk.CTkButton(self, text='Copy NMScord Emojis', font=(nms,15), height=30, corner_radius=10, command=self.copy,
+                                         fg_color='transparent', border_width=2, border_color=colors['blue-m'], hover_color=colors['blue-h'], text_color=colors['blue-m'])
         self.glyph_output_label = ctk.CTkLabel(self, text='Portal Address: ', font=(nms,20))
         
         # WIDGET PLACEMENT
-        self.hex_input.grid         (row=0,column=0, padx=20,pady=20, sticky='e', columnspan=8)
-        self.clear_button.grid      (row=0,column=8, padx=0, pady=20, sticky='w')
-        self.glyph_output_label.grid(row=1,column=0, padx=15,pady=20)
+        self.hex_input.grid         (row=0,column=0, padx=20, pady=20, sticky='e',  columnspan=8)
+        self.copy_button.grid       (row=2,column=0, padx=250,pady=20, sticky='ew', columnspan=13)
+        self.clear_button.grid      (row=0,column=8, padx=0,  pady=20, sticky='w')
+        self.glyph_output_label.grid(row=1,column=0, padx=15, pady=20)
 
         # special init and placement for glyphs
         self.glyph_output_dict = {}
@@ -88,6 +92,20 @@ class fromHex(ctk.CTkFrame):
 
         self.fade_stage = 0     # set starting point for fade_back
         self.fade_back(entry)   # start the fading loop
+
+    def copy(self):
+        # setup
+        glyph_string = self.hex_input.get().lower()
+        glyph_list   = list(glyph_string)
+
+        # joining everything together
+        copy_list    = []
+        for glyph in glyph_list:
+            copy_list.append(f':portal{glyph}: ')
+        copy_string  = ''.join(copy_list)
+
+        # copy to clipboard
+        ppc.copy(copy_string)
 
 # class fromGlyph(ctk.CTkFrame):
 # remember to add a backspace button and copy button
