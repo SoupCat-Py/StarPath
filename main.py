@@ -3,7 +3,6 @@ import customtkinter as ctk     # GUI
 import tkinter as tk
 import os                       # system stuff
 from PIL import Image as image  # images
-from contextlib import suppress # error handling
 
 # import from other scripts
 from var_handler import *
@@ -36,7 +35,7 @@ class sidebarFrame(ctk.CTkFrame):
         self.log_button =     ctk.CTkLabel(self, text='', image=get_image('log_norm', 180,60))
         self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command = lambda: open_help_window(self),
                                             fg_color=colors['main'], hover_color=colors['accent'], corner_radius=10)
-        self.version =        ctk.CTkLabel(self, text='v0.1.0', font=(nms,15))
+        self.version =        ctk.CTkLabel(self, text='v0.0.0', font=(nms,15))
 
         # list of buttons for functions where all widgets are used
         self.sidebar_buttons = [self.solar_button, self.layline_button, self.glyph_button, self.log_button]

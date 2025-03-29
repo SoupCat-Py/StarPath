@@ -41,13 +41,13 @@ class solarTab(ctk.CTkFrame):
                                   validate='key', validatecommand=(self.validate_command, '%P'))
         self.panel_image = ctk.CTkLabel(  self, text='', image=get_image('solar_panel', 256,256))
         self.panel_label = ctk.CTkLabel(  self, text='Solar Panels:', font=(nms,30), text_color=colors['main'])
-        self.panel_indic = ctk.CTkLabel(  self, text='---', font=(nms,30))
+        self.panel_indic = ctk.CTkLabel(  self, text='———', font=(nms,30))
         self.battery_image = ctk.CTkLabel(self, text='', image=get_image('battery', 256,256))
         self.battery_label = ctk.CTkLabel(self, text='Batteries:', font=(nms,30), text_color=colors['main'])
         self.battery_label_min = ctk.CTkLabel(self, text='Minimum', font=(nms,20))
         self.battery_label_adv = ctk.CTkLabel(self, text='Advised', font=(nms,20))
-        self.battery_indic_min = ctk.CTkLabel(self, text='---', font=(nms,30))
-        self.battery_indic_adv = ctk.CTkLabel(self, text='---', font=(nms,30))
+        self.battery_indic_min = ctk.CTkLabel(self, text='———', font=(nms,30))
+        self.battery_indic_adv = ctk.CTkLabel(self, text='———', font=(nms,30))
         #
         self.dp_credit = ctk.CTkButton(self, text='Based on original code by Devilin Pixy', image=get_image('dp', 50,50), corner_radius=15,
                                        command = lambda: web.open_new_tab('https://jsfiddle.net/DevilinPixy/vm6k1woe/'))
@@ -81,7 +81,7 @@ class solarTab(ctk.CTkFrame):
             return True
         # check for blank
         elif input == '':
-            self.update_indics('---','---','---')
+            self.update_indics('———','———','———')
             return True
         return False
     

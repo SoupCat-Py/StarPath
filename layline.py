@@ -100,7 +100,7 @@ class laylineTab(ctk.CTkFrame):
         self.nmslc_button = ctk.CTkLabel(self, text='', image=get_image('nmslc_norm',70,70), width=0, height=0)
         self.video_button = ctk.CTkButton(self, text='Video Guide', width=200, height=40,
                                           fg_color=colors['main'], hover_color=colors['dark'], image=get_image('yt',30,30), corner_radius=50,
-                                          command=lambda e: web.open_new_tab('https://www.youtube.com/watch?v=Ec8QN39GNB8'))
+                                          command=lambda: web.open_new_tab('https://www.youtube.com/watch?v=Ec8QN39GNB8'))
         
 
         # WIDGET PLACEMENT
