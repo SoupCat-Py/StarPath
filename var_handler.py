@@ -12,7 +12,7 @@ colors = {
 }
 
 # set image files in one line
-os.chdir(os.path.expanduser('~/Desktop/git/NMStools'))
+os.chdir(os.path.expanduser('~/Desktop/git/StarPath'))
 def get_image(name, w,h):
     # add try/except to see if the file exists first
     return ctk.CTkImage(dark_image=image.open(f'Images/{name}.png'), light_image=image.open(f'Images/{name}.png'), size=(w,h))
