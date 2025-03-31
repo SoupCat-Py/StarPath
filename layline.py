@@ -46,6 +46,7 @@ def calculate(lat1,lat2,long1,long2,dist):
 
     # cleanup and return
     listResult.sort()
+    listResult.reverse()
     verticalResult = "\n".join(map(str, listResult))
     return verticalResult
 

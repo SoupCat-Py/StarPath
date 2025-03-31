@@ -7,6 +7,9 @@ import pyperclip as ppc
 from var_handler import colors, nms, get_image
 from layline import fade
 
+global output_list
+output_list = []
+
 class fromHex(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -20,13 +23,10 @@ class fromHex(ctk.CTkFrame):
                                     validate='key', validatecommand=(self.vc_h,'%P', '%s','%S','%W'))
         self.clear_button = ctk.CTkButton(self, text='Clear', text_color=colors['main'], width=70, command=self.clear_all,
                                         fg_color='transparent', border_width=2, border_color=colors['main'], hover_color=colors['dark'])
-        self.copy_button = ctk.CTkButton(self, text='Copy NMScord Emojis', font=(nms,15), height=30, corner_radius=10, command=self.copy,
-                                         fg_color='transparent', border_width=2, border_color=colors['blue-m'], hover_color=colors['blue-h'], text_color=colors['blue-m'])
         self.glyph_output_label = ctk.CTkLabel(self, text='Portal Address: ', font=(nms,20))
         
         # WIDGET PLACEMENT
         self.hex_input.grid         (row=0,column=0, padx=20, pady=20, sticky='e',  columnspan=8)
-        self.copy_button.grid       (row=2,column=0, padx=250,pady=20, sticky='ew', columnspan=13)
         self.clear_button.grid      (row=0,column=8, padx=0,  pady=20, sticky='w')
         self.glyph_output_label.grid(row=1,column=0, padx=15, pady=20)
 
@@ -66,13 +66,21 @@ class fromHex(ctk.CTkFrame):
             for i in range(len(longer_list)):
                 self.glyph_output_dict[f'glyph_output_{i}'].configure(image=get_image(f'portal{final_list[i].lower()}',40,40))
 
+            # set output list for copying
+            global output_list
+            output_var = final.lower()
+            output_list = list(output_var)
 
             return True
         return False
     
     def check_for_last_deletion(self, unused_variable):
         if len(self.hex_input.get()) == 1:
+                # update glyphs
                 self.glyph_output_dict['glyph_output_0'].configure(image=get_image('portal-',40,40))
+                # update output list
+                global output_list
+                output_list = []
 
     def clear_all(self):
         for glyph in range(len(self.hex_input.get())):
@@ -93,21 +101,30 @@ class fromHex(ctk.CTkFrame):
         self.fade_stage = 0     # set starting point for fade_back
         self.fade_back(entry)   # start the fading loop
 
-    def copy(self):
-        # setup
-        glyph_string = self.hex_input.get().lower()
-        glyph_list   = list(glyph_string)
 
-        # joining everything together
-        copy_list    = []
-        for glyph in glyph_list:
-            copy_list.append(f':portal{glyph}: ')
-        copy_string  = ''.join(copy_list)
+class fromGlyph(ctk.CTkFrame):
+    def __init__(self, parent):
+        super().__init__(parent)
 
-        # copy to clipboard
-        ppc.copy(copy_string)
+        self._corner_radius=20
 
-# class fromGlyph(ctk.CTkFrame):
+        # WIDGET INIT
+
+        # WIDGET PLACEMENT
+
+        # SPECIAL INIT and PLACEMENT
+        glyph_input_dict={}
+        for i in range(16):
+            # set key
+            widget_name = f'glyph_input_{f'{i:X}'}'
+            # init
+            glyph_input_dict[widget_name] = ctk.CTkLabel(self, text='', image=get_image(f'portal{f'{i:X}'}',40,40))
+            # placement
+            glyph_row = 1
+            # bindings
+            
+
+
 # remember to add a backspace button and copy button
 
 class glyphTab(ctk.CTkFrame):
@@ -115,9 +132,40 @@ class glyphTab(ctk.CTkFrame):
         super().__init__(master)
 
         # WIDGET INIT
-        self.from_hex_frame=fromHex(self)
+        self.from_hex_frame =fromHex(self)
+        self.from_glyph_frame = fromGlyph(self)
         self.spacer = ctk.CTkLabel(self, text='', width=880)
+        self.type_selector = ctk.CTkSegmentedButton(self, values=['Glyph to Hex','Hex to Glyph'], command=self.type_callback)
+        self.copy_button = ctk.CTkButton(self, text='Copy NMScord Emojis', font=(nms,15), height=30, corner_radius=10, command=self.copy,
+                                         fg_color='transparent', border_width=2, border_color=colors['blue-m'], hover_color=colors['blue-h'], text_color=colors['blue-m'])
 
         # WIDGET PLACEMENT
         self.spacer.grid(row=0,column=0)
-        self.from_hex_frame.grid(row=1,column=0, padx=50, pady=50, sticky='nsew')
+        self.type_selector.grid   (row=1,column=0, pady=20)
+        self.from_glyph_frame.grid(row=2,column=0, padx=30,pady=50, sticky='nsew')
+        self.copy_button.grid     (row=3,column=0, padx=250,pady=20, sticky='ew', columnspan=13)
+
+        # set default for segButton
+        self.type_selector.set('Glyph to Hex')
+
+    
+    def type_callback(self, value):
+        print(value)
+        if value == 'Glyph to Hex':
+            self.from_hex_frame.grid_forget()
+            self.from_glyph_frame.grid(row=2,column=0, padx=30,pady=50, sticky='nsew')
+        elif value == 'Hex to Glyph':
+            self.from_glyph_frame.grid_forget()
+            self.from_hex_frame.grid(row=2,column=0, padx=30,pady=50, sticky='nsew')
+
+    def copy(self):
+        global output_list
+
+        # new list with emoji names
+        copy_list = []
+        for glyph in output_list:
+            copy_list.append(f':portal{glyph}:')
+
+        # join and copy
+        copy_string  = ''.join(copy_list)
+        ppc.vopy(copy_string)
