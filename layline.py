@@ -84,12 +84,12 @@ class laylineTab(ctk.CTkFrame):
         self.spacer = ctk.CTkLabel(self, text='', width=880, height=100)
         #   inputs
         self.step1 =       ctk.CTkLabel(self, text='Step 1:', text_color='#AAAAAA', font=(nms,20))
-        self.lat1_entry =  ctk.CTkEntry(self, placeholder_text='lat',      width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
-        self.long1_entry = ctk.CTkEntry(self, placeholder_text='long',     width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
+        self.lat1_entry =  ctk.CTkEntry(self, placeholder_text='lat',      width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'), justify='center')
+        self.long1_entry = ctk.CTkEntry(self, placeholder_text='long',     width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'), justify='center')
         self.step2 =       ctk.CTkLabel(self, text=step2_text, text_color='#AAAAAA', font=(nms,20))
-        self.lat2_entry =  ctk.CTkEntry(self, placeholder_text='lat',      width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
-        self.long2_entry = ctk.CTkEntry(self, placeholder_text='long',     width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'))
-        self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=270, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_d,'%P'))
+        self.lat2_entry =  ctk.CTkEntry(self, placeholder_text='lat',      width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'), justify='center')
+        self.long2_entry = ctk.CTkEntry(self, placeholder_text='long',     width=130, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_f,'%P','%W'), justify='center')
+        self.dist_entry =  ctk.CTkEntry(self, placeholder_text='distance', width=270, font=(nms,30), border_color='#696969', validate='key', validatecommand=(self.vc_d,'%P'), justify='center')
         #self.locate =     ctk.CTkButton(self, text='Locate', font=(nms,30), width=250, height=60, command=self.send_inputs,
         #                                image=get_image('locate',40,40), corner_radius=20)
         self.locate =      ctk.CTkLabel(self, text='', image=get_image('locate_norm',250,50))

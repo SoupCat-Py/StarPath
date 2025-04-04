@@ -19,7 +19,7 @@ class fromHex(ctk.CTkFrame):
         self.vc_h=self.register(self.validate_hex)
 
         # WIDGET INIT
-        self.hex_input = ctk.CTkEntry(self, placeholder_text='input hex', font=(nms,30), width=220, height=50,
+        self.hex_input = ctk.CTkEntry(self, placeholder_text='input hex', font=(nms,30), width=220, height=50, justify='center',
                                     validate='key', validatecommand=(self.vc_h,'%P', '%s','%S','%W'))
         self.clear_button = ctk.CTkButton(self, text='Clear', text_color=colors['main'], width=70, command=self.clear_all,
                                         fg_color='transparent', border_width=2, border_color=colors['main'], hover_color=colors['dark'])
@@ -37,17 +37,19 @@ class fromHex(ctk.CTkFrame):
             self.glyph_output_dict[output_name] = ctk.CTkLabel(self, text='', image=get_image('portal-',40,40))
             self.glyph_output_dict[output_name].grid(row=1, column=i+1, padx=5,pady=5)
 
-        self.hex_input.bind('<BackSpace>', self.check_for_last_deletion)
-
     
     def validate_hex(self, final, initial, new_char, entry):
-        # allow blank or placeholder
-        if final == '' or final == 'input hex':
+        global output_list
+
+        # allow placeholder
+        if final == 'input hex':
             return True
+        
         # check for length
         if len(final) > 12:
             self.glow_red(entry)
             return False
+        
         # check for hex
         if new_char in '1234567890abcdefABCDEF':
             # set lists
@@ -67,14 +69,22 @@ class fromHex(ctk.CTkFrame):
                 self.glyph_output_dict[f'glyph_output_{i}'].configure(image=get_image(f'portal{final_list[i].lower()}',40,40))
 
             # set output list for copying
-            global output_list
             output_var = final.lower()
             output_list = list(output_var)
-
             return True
+        
+        # check for deletion
+        if final == '':
+            # clear all glyphs
+            for i in range(12):
+                self.glyph_output_dict[f'glyph_output_{i}'].configure(image=get_image('portal-',40,40))
+            # update list
+            output_list = []
+            return True
+        
+        # do not allow if none of these conditions are met
         return False
     
-    def check_for_last_deletion(self, unused_variable):
         if len(self.hex_input.get()) == 1:
                 # update glyphs
                 self.glyph_output_dict['glyph_output_0'].configure(image=get_image('portal-',40,40))
@@ -124,9 +134,6 @@ class fromGlyph(ctk.CTkFrame):
             # bindings
             
 
-
-# remember to add a backspace button and copy button
-
 class glyphTab(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -150,7 +157,6 @@ class glyphTab(ctk.CTkFrame):
 
     
     def type_callback(self, value):
-        print(value)
         if value == 'Glyph to Hex':
             self.from_hex_frame.grid_forget()
             self.from_glyph_frame.grid(row=2,column=0, padx=30,pady=50, sticky='nsew')
