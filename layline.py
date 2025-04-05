@@ -143,6 +143,7 @@ class laylineTab(ctk.CTkFrame):
         return False
     
     def validate_float(self, input, widget):
+        print(input)
         # check for lone hyphen, blank, placeholder
         if input == '-' or input == '' or input in ['lat','long']:
             return True
@@ -158,12 +159,12 @@ class laylineTab(ctk.CTkFrame):
                     return False
                 # check for range
                 # -90 to 90 for lat, -180 to 180 for long
-                if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:      # lat
-                    self.glow_red(widget) if input < -90 or input > 90 else None              # initiate glow if out of range
-                    return True if input >= -90 and input <= 90 else False                    # return true if in range - false if out
-                elif widget in [f'{self.long1_entry}.!entry', f'{self.long2_entry}.!entry']:  # long
-                    self.glow_red(widget) if input > 180 or input < -180 else None            # initiate glow if out of range
-                    return True if input >= -180 and input <= 180 else False                  # return true if in range - false if not
+                if widget in [f'{self.lat1_entry}.!entry', f'{self.lat2_entry}.!entry']:     # lat
+                    self.glow_red(widget) if input > 90 or input < -90 else None             # initiate glow if out of range
+                    return True if -90 <= input <= 90 else False                             # return true if in range - false if out
+                elif widget in [f'{self.long1_entry}.!entry', f'{self.long2_entry}.!entry']: # long
+                    self.glow_red(widget) if input > 180 or input < -180 else None           # initiate glow if out of range
+                    return True if input -180 <= input <= 180 else False                     # return true if in range - false if not
             except ValueError:
                 return False
         return False
