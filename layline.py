@@ -143,7 +143,6 @@ class laylineTab(ctk.CTkFrame):
         return False
     
     def validate_float(self, input, widget):
-        print(input)
         # check for lone hyphen, blank, placeholder
         if input == '-' or input == '' or input in ['lat','long']:
             return True

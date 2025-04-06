@@ -28,11 +28,12 @@ class sidebarFrame(ctk.CTkFrame):
                        corner_radius=0)
         
         # widget config
-        self.sidebar_title =  ctk.CTkButton(self, text='StarPath', font=(nms,30), image=get_image('icon',50,50), hover=False, fg_color=colors['main'])
-        self.solar_button =   ctk.CTkLabel(self, text='', image=get_image('solar_norm', 180,60))
-        self.layline_button = ctk.CTkLabel(self, text='', image=get_image('layline_norm', 180,60))
-        self.glyph_button =   ctk.CTkLabel(self, text='', image=get_image('glyph_norm', 180,60))
-        self.log_button =     ctk.CTkLabel(self, text='', image=get_image('log_norm', 180,60))
+        self.sidebar_title =  ctk.CTkButton(self, text='StarPath', font=(nms,30), hover=False, fg_color=colors['main'])
+        self.solar_button =   ctk.CTkLabel( self, text='', image=get_image('solar_norm', 180,60))
+        self.layline_button = ctk.CTkLabel( self, text='', image=get_image('layline_norm', 180,60))
+        self.glyph_button =   ctk.CTkLabel( self, text='', image=get_image('glyph_norm', 180,60))
+        self.log_button =     ctk.CTkLabel( self, text='', image=get_image('log_norm', 180,60))
+        self.settings_button =ctk.CTkButton(self, text='Settings', fg_color=colors['dark'], hover_color=colors['accent'], corner_radius=15)
         self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command = lambda: web.open_new_tab('https://github.com/SoupCat-Py/NMStools/wiki'),
                                             fg_color=colors['main'], hover_color=colors['accent'], corner_radius=10)
         self.version =        ctk.CTkLabel(self, text='v0.1.0', font=(nms,15))
@@ -54,6 +55,7 @@ class sidebarFrame(ctk.CTkFrame):
         self.layline_button.grid(row=2,column=0, padx=0, pady=10, sticky='w')
         self.glyph_button.grid(  row=3,column=0, padx=0, pady=10, sticky='w')
         self.log_button.grid(    row=4,column=0, padx=0, pady=10, sticky='w')
+        self.settings_button.grid(row=5,column=0, padx=0,pady=20)
         self.help.place(         x = 75, y = 685)
         self.version.place(      x = 15, y = 685)
 
@@ -88,6 +90,10 @@ class main(ctk.CTk):
         self.geometry('1080x720')
         self.resizable(False,False)
         self.title('')
+        
+        # background
+        self.bg = ctk.CTkLabel(self, text='', image=get_image('bg',880,720))
+        self.bg.place(x=200,y=0)
 
         # initialize sidebar
         self.sidebar = sidebarFrame(self)

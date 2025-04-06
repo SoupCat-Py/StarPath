@@ -9,5 +9,8 @@ class logTab(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.placeholder = ctk.CTkLabel(self, text='log tab')
-        self.placeholder.grid(row=0,column=0, sticky='ew')
+        # WIDGETS
+        self.spacer = ctk.CTkLabel(self, text='', width=880)
+        
+        # PLACEMENT
+        self.spacer.grid(row=0,column=0, sticky='ew')
