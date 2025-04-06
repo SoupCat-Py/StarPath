@@ -1,0 +1,5 @@
+customtkinter
+pillow
+webbrowser
+tkinter
+pyperclip
