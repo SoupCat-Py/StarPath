@@ -18,10 +18,7 @@ nms = 'GeosansLight-NMS'
 tab = 'Main'
 
 # set image files in one line
-os.chdir(os.path.expanduser('~/Desktop/git/StarPath'))
+os.chdir(os.path.expanduser('~/Desktop/git/StarPath')) # change this later when program is done / in dist phase
 def get_image(name, w,h):
     # add try/except to see if the file exists first
     return ctk.CTkImage(dark_image=image.open(f'Images/{name}.png'), light_image=image.open(f'Images/{name}.png'), size=(w,h))
-
-
-# store other variables here such as logged coords

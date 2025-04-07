@@ -33,7 +33,7 @@ class sidebarFrame(ctk.CTkFrame):
         self.layline_button = ctk.CTkLabel( self, text='', image=get_image('layline_norm', 180,60))
         self.glyph_button =   ctk.CTkLabel( self, text='', image=get_image('glyph_norm', 180,60))
         self.log_button =     ctk.CTkLabel( self, text='', image=get_image('log_norm', 180,60))
-        self.settings_button =ctk.CTkButton(self, text='Settings', fg_color=colors['dark'], hover_color=colors['accent'], corner_radius=15)
+        self.settings_button =ctk.CTkButton(self, text='Settings', fg_color=colors['dark'], hover_color=colors['accent'], corner_radius=15, command=self.open_settings)
         self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command = lambda: web.open_new_tab('https://github.com/SoupCat-Py/NMStools/wiki'),
                                             fg_color=colors['main'], hover_color=colors['accent'], corner_radius=10)
         self.version =        ctk.CTkLabel(self, text='v0.1.0', font=(nms,15))
@@ -79,7 +79,41 @@ class sidebarFrame(ctk.CTkFrame):
             widget.configure(image=get_image(f'{self.widgets[widget]}_{mode}', 180,60))    # change image
         self.master.switch_tab(self.widgets[target])
         self.sidebar_title.focus_set() if widget != target else None
+        
+    def open_settings(self):
+        self.master.switch_tab('settings')
+        for button in self.sidebar_buttons:                                            # reset all other buttons
+            button.configure(image=get_image(f'{self.widgets[button]}_norm', 180,60))  # ^
+        self.focus_set(self.sidebar_title) if tab != 'settings' else None              # remove focus from other tabs
+        
 
+class settingsFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        # frame config
+        
+        # WIDGET CONFIG
+        self.spacer =         ctk.CTkLabel(self, text='', width=880, height=1)
+        self.settings_title = ctk.CTkLabel(self, text='StarPath Settings', font=(nms,40), text_color=colors['light'])
+        self.dev_button =    ctk.CTkButton(self, text='Developer Mode', font=(nms, 20), command=self.secret,
+                                           fg_color=colors['accent'], hover_color=colors['dark'], width=200, height=30)
+        
+        # WIDGET PLACEMENT
+        self.spacer.grid(        row=0,column=0, sticky='ew')
+        self.settings_title.grid(row=1,column=0, padx=20,pady=20, sticky='nsew')
+        self.dev_button.grid(    row=2,column=0, padx=20,pady=20)
+
+    def secret(self):
+        video_path = os.path.expanduser('~/Desktop/git/StarPath/Images/video.mp4')
+        if sys.platform == 'darwin':
+            import subprocess
+            subprocess.run(['open', video_path])
+        elif sys.platform == 'win32':
+            os.startfile(video_path)
+            # import pyautogui
+            # self.after(2000, lambda: pyautogui.press('space'))
+            
 
 class main(ctk.CTk):
     # initalization
@@ -107,12 +141,14 @@ class main(ctk.CTk):
         self.layline_tab = laylineTab(self)
         self.glyph_tab = glyphTab(self)
         self.log_tab = logTab(self)
+        self.settings_tab = settingsFrame(self)
 
         self.tab_dict = {
             'solar'   : self.solar_tab,
             'layline' : self.layline_tab,
             'glyph'   : self.glyph_tab,
-            'log'     : self.log_tab
+            'log'     : self.log_tab,
+            'settings': self.settings_tab
         }
 
 
@@ -125,8 +161,8 @@ class main(ctk.CTk):
 
         # check if user is clicking onto a DIFFERENT tab
         if tab != tab_target:
-            for page in [self.solar_tab, self.layline_tab, self.glyph_tab, self.log_tab]: # remove all page frames
-                page.grid_forget()                                                        # ^
+            for page in [self.solar_tab, self.layline_tab, self.glyph_tab, self.log_tab, self.settings_tab]: # remove all page frames
+                page.grid_forget()                                                                           # ^
             dest_page = self.tab_dict[tab_target]          # get destination page from dict
             dest_page.grid(row=0,column=1, sticky='nsew')  # show the destination page
             tab = tab_target                               # set tab var

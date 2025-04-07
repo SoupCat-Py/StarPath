@@ -1,6 +1,3 @@
 customtkinter
-pillow
-webbrowser
-tkinter
+Pillow
 pyperclip
-pywinstyles
