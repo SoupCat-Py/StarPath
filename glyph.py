@@ -122,13 +122,16 @@ class glyph_input_frame(ctk.CTkFrame):
         for i in range(16):
             widget_name = f'glyph_input_{f'{i:X}'}'
             # init
-            glyph_input_dict[widget_name] = ctk.CTkLabel(self, text='', image=get_image(f'portal{f'{i:X}'}',50,50))
+            glyph_input_dict[widget_name] = ctk.CTkLabel(self, text='', image=get_image(f'portal{f'{i:X}'}',70,70),
+                                                         fg_color='transparent', corner_radius=5)
             # placement
             glyph_row = 0 if i < 8 else 1
             glyph_column = i if i < 8 else i-8 
-            glyph_input_dict[widget_name].grid(row=glyph_row, column=glyph_column, padx=20,pady=20)
+            glyph_input_dict[widget_name].grid(row=glyph_row, column=glyph_column, padx=10,pady=15)
             # bindings - return hex value instead of index
             glyph_input_dict[widget_name].bind(left_click, lambda em, h=f'{i:X}': self.glyph_input_click(parent, h))
+            glyph_input_dict[widget_name].bind('<Enter>',  lambda em, h=f'{i:X}': glyph_input_dict[f'glyph_input_{h}'].configure(fg_color='#393939'))
+            glyph_input_dict[widget_name].bind('<Leave>',  lambda em, h=f'{i:X}': glyph_input_dict[f'glyph_input_{h}'].configure(fg_color='transparent'))
 
     def glyph_input_click(self, parent, glyph_input):
         if len(output_list) < 12:

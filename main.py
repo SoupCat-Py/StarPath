@@ -89,6 +89,9 @@ class main(ctk.CTk):
         # main window config
         self.geometry('1080x720')
         self.resizable(False,False)
+        if sys.platform == 'win32':
+            import pywinstyles
+            pywinstyles.apply_style(self, 'acrylic')
         self.title('')
         
         # background

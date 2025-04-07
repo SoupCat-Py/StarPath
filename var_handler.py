@@ -5,10 +5,10 @@ import os, sys
 colors = {
     'main'   : '#d80000',   # main red
     'accent' : '#c20404',   # accent red - button norm
-    'light'  : '#f82121',   # light red - button hov
-    'dark'   : '#9d0202',   # dark red - button sel
-    'blue-m' : '#036ffc',   # main blue - copy button
-    'blue-h' : '#083b80'    # hover blue - copy button
+    'light'  : '#f82121',   # light red  - button hov
+    'dark'   : '#9d0202',   # dark red   - button sel
+    'blue-m' : '#036ffc',   # main blue  - copy button
+    'blue-h' : '#083b80'   # hover blue - copy button
 }
 
 # left click for macOS and Windows

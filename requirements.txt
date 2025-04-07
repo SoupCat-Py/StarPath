@@ -3,3 +3,4 @@ pillow
 webbrowser
 tkinter
 pyperclip
+pywinstyles
