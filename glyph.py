@@ -136,11 +136,12 @@ class glyph_input_frame(ctk.CTkFrame):
     def glyph_input_click(self, parent, glyph_input):
         if len(output_list) < 12:
             # update list
-            output_list.append(glyph_input)
+            output_list.append(glyph_input.lower())
             # update label
             global input_index
+            # temp is for updating the display
             output_list_temp = list(parent.hex_output.cget('text'))       # make a list from the text
-            output_list_temp[input_index] = glyph_input                   # replace last item in list
+            output_list_temp[input_index] = glyph_input                   # replace display list item with the new one at the right spot
             input_index += 1                                              # increase index
             parent.hex_output.configure(text=(''.join(output_list_temp))) # convert list back to string and set label
         else:
