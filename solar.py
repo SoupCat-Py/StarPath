@@ -4,7 +4,7 @@ import webbrowser as web
 from math import ceil
 
 # import from other scripts
-from var_handler import colors, get_image, nms
+from var_handler import *
 
 def get(input):
     tpc = int(input)

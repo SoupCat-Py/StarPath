@@ -103,6 +103,13 @@ class settingsFrame(ctk.CTkFrame):
         self.spacer.grid(        row=0,column=0, sticky='ew')
         self.settings_title.grid(row=1,column=0, padx=20,pady=20, sticky='nsew')
         self.dev_button.grid(    row=2,column=0, padx=20,pady=20)
+        
+        # TODO:
+        # import/export log file for coordinate log
+        # reset log
+        # themes
+        # change font?
+        # app icon?
 
     def secret(self):
         video_path = os.path.expanduser('~/Desktop/git/StarPath/Images/video.mp4')
@@ -137,10 +144,10 @@ class main(ctk.CTk):
         self.sidebar.grid(row=0,column=0, sticky='nsew')
 
         # initialize tabs
-        self.solar_tab = solarTab(self)
-        self.layline_tab = laylineTab(self)
-        self.glyph_tab = glyphTab(self)
-        self.log_tab = logTab(self)
+        self.solar_tab =    solarTab(    self)
+        self.layline_tab =  laylineTab(  self)
+        self.glyph_tab =    glyphTab(    self)
+        self.log_tab =      logTab(      self)
         self.settings_tab = settingsFrame(self)
 
         self.tab_dict = {

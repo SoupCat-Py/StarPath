@@ -4,7 +4,7 @@ import webbrowser as web
 import pyperclip as ppc
 
 # other scripts
-from var_handler import colors, nms, get_image, left_click
+from var_handler import *
 from layline import fade
 
 global output_list, input_index
@@ -164,20 +164,23 @@ class fromGlyph(ctk.CTkFrame):
 
         # window init
         self._corner_radius=20
-        self.grid_columnconfigure((0,1,2), weight=1) # center columns and set equal width
+        self.grid_columnconfigure((0,1,2,3,4), weight=1) # center columns and set equal width
 
         # WIDGET INIT
         self.glyph_input =      glyph_input_frame(self)
+        self.copy_button =      ctk.CTkButton(self, text='Copy Raw', width=100, height=30, command=self.copy_raw,
+                                              text_color=colors['blue-m'], fg_color='transparent', border_width=2, border_color=colors['blue-m'], hover_color=colors['blue-h'])
         self.hex_output =       ctk.CTkLabel( self, text='_'*12, font=('courier',40), anchor='center')
         self.backspace_button = ctk.CTkLabel( self, text='', image=get_image('backspace',50,50))
-        self.clear_button =     ctk.CTkButton(self, text='Clear', text_color=colors['main'], width=70, height=30, command=self.clear_all,
-                                        fg_color='transparent', border_width=2, border_color=colors['main'], hover_color=colors['dark'])
+        self.clear_button =     ctk.CTkButton(self, text='Clear', width=70, height=30, command=self.clear_all,
+                                        fg_color='transparent', border_width=2, border_color=colors['main'], text_color=colors['main'], hover_color=colors['dark'])
 
         # WIDGET PLACEMENT
-        self.glyph_input.grid(     row=0,column=0, padx=20,pady=20, sticky='nsew', columnspan=3)
-        self.hex_output.grid(      row=1,column=1, padx=20,pady=20, sticky='ew')
-        self.clear_button.grid(    row=1,column=0, padx=20,pady=20, sticky='e')
-        self.backspace_button.grid(row=1,column=2, padx=20,pady=20, sticky='w')
+        self.glyph_input.grid(     row=0,column=0, padx=20,pady=20, sticky='nsew', columnspan=5)
+        self.copy_button.grid(     row=1,column=1, padx=20,pady=20, sticky='e')
+        self.hex_output.grid(      row=1,column=2, padx=20,pady=20, sticky='ew')
+        self.backspace_button.grid(row=1,column=3, padx=20,pady=20, sticky='e')
+        self.clear_button.grid(    row=1,column=4, padx=20,pady=20, sticky='w')
 
         # BINDINGS
         self.backspace_button.bind(left_click, lambda em: self.backspace())
@@ -200,6 +203,11 @@ class fromGlyph(ctk.CTkFrame):
         output_list = []  # reset output list
         self.hex_output.configure(text='_'*12)  # reset output label
         input_index = 0  # reset index
+        
+    def copy_raw(self):
+        global output_list
+        raw_string = ''.join(output_list)
+        ppc.copy(raw_string.upper())
 
 class glyphTab(ctk.CTkFrame):
     def __init__(self, master):
@@ -211,7 +219,7 @@ class glyphTab(ctk.CTkFrame):
         self.spacer = ctk.CTkLabel(self, text='', width=880)
         self.type_selector = ctk.CTkSegmentedButton(self, values=['Glyph -> Hex','Hex -> Glyph'], command=self.type_callback,
                                                     font=(nms, 25), fg_color=colors['main'], selected_color=colors['dark'], unselected_color=colors['accent'], unselected_hover_color=colors['light'], selected_hover_color=colors['dark'])
-        self.copy_button = ctk.CTkButton(self, text='Copy NMScord Emojis', font=(nms,15), height=30, corner_radius=10, command=self.copy,
+        self.copy_button = ctk.CTkButton(self, text='Copy NMScord Emojis', height=30, corner_radius=10, command=self.copy,
                                          fg_color='transparent', border_width=2, border_color=colors['blue-m'], hover_color=colors['blue-h'], text_color=colors['blue-m'])
 
         # WIDGET PLACEMENT
