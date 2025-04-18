@@ -206,8 +206,17 @@ class fromGlyph(ctk.CTkFrame):
         
     def copy_raw(self):
         global output_list
+        
+        # user validation
+        temp_text = self.copy_button.cget('text')
+        self.copy_button.configure(text='✅')
+        
+        # convert to a string and copy
         raw_string = ''.join(output_list)
         ppc.copy(raw_string.upper())
+        
+        # reset buttpon
+        self.after(1000, lambda: self.copy_button.configure(text=temp_text))
 
 class glyphTab(ctk.CTkFrame):
     def __init__(self, master):
@@ -242,6 +251,10 @@ class glyphTab(ctk.CTkFrame):
 
     def copy(self):
         global output_list
+        
+        # user validation
+        temp_text = self.copy_button.cget('text')
+        self.copy_button.configure(text='✅')
 
         # new list with emoji names
         copy_list = []
@@ -251,3 +264,6 @@ class glyphTab(ctk.CTkFrame):
         # join and copy
         copy_string  = ''.join(copy_list)
         ppc.copy(copy_string)
+        
+        # reset the button
+        self.after(1000, lambda: self.copy_button.configure(text=temp_text))
