@@ -11,6 +11,7 @@ from solar import solarTab
 from layline import laylineTab
 from glyph import glyphTab
 from log import logTab
+from settings import settingsTab
 
 # remember do make a folder in either User or AppData for images
 # then reroute there
@@ -84,43 +85,7 @@ class sidebarFrame(ctk.CTkFrame):
         self.master.switch_tab('settings')
         for button in self.sidebar_buttons:                                            # reset all other buttons
             button.configure(image=get_image(f'{self.widgets[button]}_norm', 180,60))  # ^
-        self.focus_set(self.sidebar_title) if tab != 'settings' else None              # remove focus from other tabs
-        
-
-class settingsFrame(ctk.CTkFrame):
-    def __init__(self, master):
-        super().__init__(master)
-        
-        # frame config
-        
-        # WIDGET CONFIG
-        self.spacer =         ctk.CTkLabel(self, text='', width=880, height=1)
-        self.settings_title = ctk.CTkLabel(self, text='StarPath Settings', font=(nms,40), text_color=colors['light'])
-        self.dev_button =    ctk.CTkButton(self, text='Developer Mode', font=(nms, 20), command=self.secret,
-                                           fg_color=colors['accent'], hover_color=colors['dark'], width=200, height=30)
-        
-        # WIDGET PLACEMENT
-        self.spacer.grid(        row=0,column=0, sticky='ew')
-        self.settings_title.grid(row=1,column=0, padx=20,pady=20, sticky='nsew')
-        self.dev_button.grid(    row=2,column=0, padx=20,pady=20)
-        
-        # TODO:
-        # import/export log file for coordinate log
-        # reset log
-        # themes
-        # change font?
-        # app icon?
-
-    def secret(self):
-        video_path = os.path.expanduser('~/Desktop/git/StarPath/Images/video.mp4')
-        if sys.platform == 'darwin':
-            import subprocess
-            subprocess.run(['open', video_path])
-        elif sys.platform == 'win32':
-            os.startfile(video_path)
-            # import pyautogui
-            # self.after(2000, lambda: pyautogui.press('space'))
-            
+        self.focus_set(self.sidebar_title) if tab != 'settings' else None              # remove focus from other tabs         
 
 class main(ctk.CTk):
     # initalization
@@ -144,11 +109,11 @@ class main(ctk.CTk):
         self.sidebar.grid(row=0,column=0, sticky='nsew')
 
         # initialize tabs
-        self.solar_tab =    solarTab(    self)
-        self.layline_tab =  laylineTab(  self)
-        self.glyph_tab =    glyphTab(    self)
-        self.log_tab =      logTab(      self)
-        self.settings_tab = settingsFrame(self)
+        self.solar_tab =    solarTab(   self)
+        self.layline_tab =  laylineTab( self)
+        self.glyph_tab =    glyphTab(   self)
+        self.log_tab =      logTab(     self)
+        self.settings_tab = settingsTab(self, self.glyph_tab)
 
         self.tab_dict = {
             'solar'   : self.solar_tab,
@@ -177,4 +142,5 @@ class main(ctk.CTk):
 
 app = main()
 app.mainloop()
+save_settings()
 os._exit(0)

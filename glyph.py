@@ -2,6 +2,7 @@
 import customtkinter as ctk
 import webbrowser as web
 import pyperclip as ppc
+import inflect
 
 # other scripts
 from var_handler import *
@@ -228,7 +229,7 @@ class glyphTab(ctk.CTkFrame):
         self.spacer = ctk.CTkLabel(self, text='', width=880)
         self.type_selector = ctk.CTkSegmentedButton(self, values=['Glyph -> Hex','Hex -> Glyph'], command=self.type_callback,
                                                     font=(nms, 25), fg_color=colors['main'], selected_color=colors['dark'], unselected_color=colors['accent'], unselected_hover_color=colors['light'], selected_hover_color=colors['dark'])
-        self.copy_button = ctk.CTkButton(self, text='Copy NMScord Emojis', height=30, corner_radius=10, command=self.copy,
+        self.copy_button = ctk.CTkButton(self, text='Copy Emojis', height=30, corner_radius=10, command=self.copy,
                                          fg_color='transparent', border_width=2, border_color=colors['blue-m'], hover_color=colors['blue-h'], text_color=colors['blue-m'])
 
         # WIDGET PLACEMENT
@@ -250,7 +251,7 @@ class glyphTab(ctk.CTkFrame):
             self.from_hex_frame.grid(row=2,column=0, padx=30,pady=50, sticky='nsew')
 
     def copy(self):
-        global output_list
+        global output_list, settings_dict
         
         # user validation
         temp_text = self.copy_button.cget('text')
@@ -258,8 +259,22 @@ class glyphTab(ctk.CTkFrame):
 
         # new list with emoji names
         copy_list = []
+        IEA_converter = inflect.engine()
         for glyph in output_list:
-            copy_list.append(f':portal{glyph}:')
+            prefix = settings_dict['EmojiPrefix']
+            preset = settings_dict['EmojiPreset']
+            if preset in ['Oskar1up','GerMan\'s Sky','NMH']:
+                copy_list.append(f':{prefix}{glyph.upper()}:')
+            elif preset == 'NMScord':
+                copy_list.append(f':{prefix}{glyph.lower()}:')
+            elif preset == 'NMS Francophone':
+                copy_list.append(f':{glyph.upper()}{prefix}:')
+            elif preset == 'NMS Russia':
+                copy_list.append(f':Portal{int(glyph,16)+1}:')
+            elif preset == 'IEA':
+                copy_list.append(f':glyph_{IEA_converter.number_to_words(int(glyph,16)+1)}:')
+            elif preset == 'none':
+                copy_list.append(f':{prefix}{glyph.upper() if settings_dict['EmojiUppercase'] else glyph.lower()}:')
 
         # join and copy
         copy_string  = ''.join(copy_list)
@@ -267,3 +282,9 @@ class glyphTab(ctk.CTkFrame):
         
         # reset the button
         self.after(1000, lambda: self.copy_button.configure(text=temp_text))
+        
+    def toggle_copy_button(self, state):
+        if state == 1:
+            self.copy_button.grid(row=3,column=0, padx=250,pady=20, sticky='ew', columnspan=13)
+        elif state == 0:
+            self.copy_button.grid_forget()
