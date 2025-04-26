@@ -203,4 +203,4 @@ class laylineTab(ctk.CTkFrame):
             self.result_frame.result_label.configure(text=calculate(float(lat1_temp), float(lat2_temp), float(long1_temp), float(long2_temp), float(dist_temp)))
         else:
             # show user an error
-            msg.showinfo('error','Please make sure all the inputs are filled out :)')
+            msg.showinfo('error','Please make sure all the inputs are filled out 😉')

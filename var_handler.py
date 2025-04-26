@@ -16,7 +16,6 @@ colors = {
 # left click for macOS and Windows
 left_click = '<Button-1>' if sys.platform == 'darwin' else '<Button-0>'
 
-nms = 'GeosansLight-NMS'
 tab = 'Main'
 prefix = 'portal'
 
@@ -58,7 +57,9 @@ default('EnableEmoji', True)
 default('EmojiPrefix', 'portal')
 default('EmojiPreset', 'NMScord')
 default('EmojiUppercase', True)
+default('Font', 'GeosansLight-NMS')
 save_settings()
     
+nms = settings_dict['Font']
         
 # copy all the other files over - images

@@ -113,7 +113,8 @@ class main(ctk.CTk):
         self.layline_tab =  laylineTab( self)
         self.glyph_tab =    glyphTab(   self)
         self.log_tab =      logTab(     self)
-        self.settings_tab = settingsTab(self, self.glyph_tab)
+        # create the settings tab and pass GLYPH and MAIN instances
+        self.settings_tab = settingsTab(self, self.glyph_tab, self)
 
         self.tab_dict = {
             'solar'   : self.solar_tab,
@@ -140,7 +141,6 @@ class main(ctk.CTk):
             tab = tab_target                               # set tab var
             self.update_idletasks()                        # update window for faster refresh
 
-app = main()
-app.mainloop()
+starpath = main()
+starpath.mainloop()
 save_settings()
-os._exit(0)

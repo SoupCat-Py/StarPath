@@ -2,6 +2,7 @@
     "EnableEmoji": true,
     "EmojiPrefix": "portal",
     "EmojiPreset": "NMScord",
-    "EmojiUppercase": false
+    "EmojiUppercase": false,
+    "Font" : "GeosansLight-NMS"
    }
    
