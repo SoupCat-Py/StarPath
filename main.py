@@ -29,7 +29,7 @@ class sidebarFrame(ctk.CTkFrame):
                        corner_radius=0)
         
         # widget config
-        self.sidebar_title =  ctk.CTkButton(self, text='StarPath', font=(nms,30), hover=False, fg_color=colors['main'])
+        self.sidebar_title =  ctk.CTkButton(self, text='StarPath', font=('GeosansLight-NMS',32), hover=False, fg_color=colors['main'], image=get_image('logo',42,60))
         self.solar_button =   ctk.CTkLabel( self, text='', image=get_image('solar_norm', 180,60))
         self.layline_button = ctk.CTkLabel( self, text='', image=get_image('layline_norm', 180,60))
         self.glyph_button =   ctk.CTkLabel( self, text='', image=get_image('glyph_norm', 180,60))

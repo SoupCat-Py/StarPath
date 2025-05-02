@@ -25,10 +25,11 @@ def get_image(name, w,h):
     # add try/except to see if the file exists first
     return ctk.CTkImage(dark_image=image.open(f'Images/{name}.png'), light_image=image.open(f'Images/{name}.png'), size=(w,h))
 
-# default file for JSON logging
+# app support folder
 if sys.platform == 'darwin':
     app_support_dir = Path.home() / 'Library' / 'Application Support' / 'StarPath'  # get the folder to log stuff (and add images)
-    
+
+# create the JSON file
 app_support_dir.mkdir(parents=True, exist_ok=True)                                  # create the folder if it doesn't exist
 log_file = app_support_dir / 'log.json'                                             # set json file path
 settings_file = app_support_dir / 'settings.json'
@@ -47,6 +48,8 @@ with open(settings_file, 'r') as settings:
 def save_settings():
     with open(settings_file, 'w') as settings:
         json.dump(settings_dict, settings, indent=1)
+def save_log():
+    pass
         
 # set default settings
 def default(key, value):
