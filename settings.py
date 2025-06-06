@@ -167,7 +167,6 @@ class settingsTab(ctk.CTkFrame):
         super().__init__(master)
     
         # frame config
-        self.grid_columnconfigure([0,1], weight=1)
         self.grid_rowconfigure([2,3,4], weight=1)
         
                 
@@ -176,50 +175,17 @@ class settingsTab(ctk.CTkFrame):
         self.settings_title = ctk.CTkLabel(self, text='StarPath Settings', font=(nms,40), text_color=colors['light'])
         self.dev_button = ctk.CTkButton(self, text='Developer Mode', font=(nms, 20), command=self.secret,
                                            fg_color=colors['accent'], hover_color=colors['dark'], width=200, height=30)
-        self.issues_button = ctk.CTkLabel(self, text='', image=get_image('github_closed',50,50))
-        self.email_button  = ctk.CTkLabel(self, text='', image=get_image('mail_closed',50,50))
         #
         general_settings = generalSettingsFrame(self, main_instance)
         glyph_settings = glyphSettingsFrame(self, glyphTab_instance)
         
         # WIDGET PLACEMENT
-        self.spacer.grid(        row=0,column=0, columnspan=2, sticky='ew')
-        self.settings_title.grid(row=1,column=0, columnspan=2, padx=20,pady=20, sticky='nsew')
-        self.dev_button.grid(    row=4,column=0, columnspan=2, padx=20,pady=00, sticky='n')
-        self.issues_button.place(x=810,y=650)
-        self.email_button.place( x=810,y=580)
+        self.spacer.grid(        row=0,column=0, sticky='ew')
+        self.settings_title.grid(row=1,column=0, padx=20,pady=20, sticky='nsew')
+        self.dev_button.grid(    row=4,column=0, padx=20,pady=00, sticky='n')
         #
-        general_settings.grid(   row=2,column=0, columnspan=2, padx=20,pady=10, sticky='nsew')
-        glyph_settings.grid(     row=3,column=0,               padx=20,pady=10, sticky='nw')
-        
-        # contact button bindings
-        self.email_button.bind('<Enter>',  lambda e: self.expand_button(self.email_button))
-        self.email_button.bind('<Leave>',  lambda e: self.collapse_button(self.email_button))
-        self.email_button.bind(left_click, lambda e: web.open_new_tab('https://mail.google.com/mail/?view=cm&fs=1&to=soupcat.py@gmail.com'))
-        self.issues_button.bind('<Enter>',  lambda e: self.expand_button(self.issues_button))
-        self.issues_button.bind('<Leave>',  lambda e: self.collapse_button(self.issues_button))
-        self.issues_button.bind(left_click, lambda e: web.open_new_tab('https://github.com/SoupCat-Py/StarPath/issues/new'))
-        
-        # TODO:
-        # import/export log file for coordinate log
-        # reset log
-        
-    def expand_button(self, button):
-        if int(button.winfo_x()) > 800:
-            if button == self.issues_button:
-                button.configure(image=get_image('github_open',250,50))
-                button.place(x=610,y=650)
-            elif button == self.email_button:
-                button.configure(image=get_image('mail_open',235,50))
-                button.place(x=625,y=580)
-            
-    def collapse_button(self, button):
-        if button == self.issues_button:
-            button.configure(image=get_image('github_closed',50,50))
-            button.place(x=810,y=650)
-        elif button == self.email_button:
-            button.configure(image=get_image('mail_closed',50,50))
-            button.place(x=810,y=580)
+        general_settings.grid(   row=2,column=0, padx=20,pady=10, sticky='nsew')
+        glyph_settings.grid(     row=3,column=0, padx=20,pady=10, sticky='nsew')
 
     def secret(self):
         video_path = os.path.expanduser('~/Desktop/git/StarPath/Images/video.mp4')

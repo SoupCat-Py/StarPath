@@ -30,11 +30,9 @@ if sys.platform == 'darwin':
     app_support_dir = Path.home() / 'Library' / 'Application Support' / 'StarPath'  # get the folder to log stuff (and add images)
 
 # create the JSON file
-app_support_dir.mkdir(parents=True, exist_ok=True)                                  # create the folder if it doesn't exist
-log_file = app_support_dir / 'log.json'                                             # set json file path
-settings_file = app_support_dir / 'settings.json'
-log_file.touch(exist_ok=True)       # create the files
-settings_file.touch(exist_ok=True)  # ^
+app_support_dir.mkdir(parents=True, exist_ok=True)  # create the folder if it doesn't exist
+settings_file = app_support_dir / 'settings.json'   # set json file path
+settings_file.touch(exist_ok=True)                  # create the file
         
 # read settings file
 settings_dict = {}

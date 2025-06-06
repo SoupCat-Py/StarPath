@@ -10,8 +10,8 @@ from var_handler import *
 from solar import solarTab
 from layline import laylineTab
 from glyph import glyphTab
-from log import logTab
 from settings import settingsTab
+from help import helpTab
 
 # remember do make a folder in either User or AppData for images
 # then reroute there
@@ -33,21 +33,19 @@ class sidebarFrame(ctk.CTkFrame):
         self.solar_button =   ctk.CTkLabel( self, text='', image=get_image('solar_norm', 180,60))
         self.layline_button = ctk.CTkLabel( self, text='', image=get_image('layline_norm', 180,60))
         self.glyph_button =   ctk.CTkLabel( self, text='', image=get_image('glyph_norm', 180,60))
-        self.log_button =     ctk.CTkLabel( self, text='', image=get_image('log_norm', 180,60))
-        self.settings_button =ctk.CTkButton(self, text='Settings', fg_color=colors['dark'], hover_color=colors['accent'], corner_radius=15, command=self.open_settings)
-        self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command = lambda: web.open_new_tab('https://github.com/SoupCat-Py/NMStools/wiki'),
+        self.settings_button =ctk.CTkButton(self, text='Settings', fg_color=colors['dark'], hover_color=colors['accent'], corner_radius=15, command=lambda: self.open_special('settings'))
+        self.help =           ctk.CTkButton(self, text='Help', font=(nms, 15), width=50, command=lambda: self.open_special('help'),
                                             fg_color=colors['main'], hover_color=colors['accent'], corner_radius=10)
         self.version =        ctk.CTkLabel(self, text='v0.1.0', font=(nms,15))
 
         # list of buttons for functions where all widgets are used
-        self.sidebar_buttons = [self.solar_button, self.layline_button, self.glyph_button, self.log_button]
+        self.sidebar_buttons = [self.solar_button, self.layline_button, self.glyph_button]
 
         # dict for functions where widget and name are used
         self.widgets = {
             self.solar_button   : 'solar',
             self.layline_button : 'layline',
             self.glyph_button   : 'glyph',
-            self.log_button     : 'log'
         }
         
         # widget placement
@@ -55,7 +53,6 @@ class sidebarFrame(ctk.CTkFrame):
         self.solar_button.grid(  row=1,column=0, padx=0, pady=10, sticky='w')
         self.layline_button.grid(row=2,column=0, padx=0, pady=10, sticky='w')
         self.glyph_button.grid(  row=3,column=0, padx=0, pady=10, sticky='w')
-        self.log_button.grid(    row=4,column=0, padx=0, pady=10, sticky='w')
         self.settings_button.grid(row=5,column=0, padx=0,pady=20)
         self.help.place(         x = 75, y = 685)
         self.version.place(      x = 15, y = 685)
@@ -81,11 +78,11 @@ class sidebarFrame(ctk.CTkFrame):
         self.master.switch_tab(self.widgets[target])
         self.sidebar_title.focus_set() if widget != target else None
         
-    def open_settings(self):
-        self.master.switch_tab('settings')
+    def open_special(self, button):
+        self.master.switch_tab(button)
         for button in self.sidebar_buttons:                                            # reset all other buttons
             button.configure(image=get_image(f'{self.widgets[button]}_norm', 180,60))  # ^
-        self.focus_set(self.sidebar_title) if tab != 'settings' else None              # remove focus from other tabs         
+        self.focus_set(self.sidebar_title) if tab not in ['settings','help'] else None # remove focus from other tabs         
 
 class main(ctk.CTk):
     # initalization
@@ -112,16 +109,16 @@ class main(ctk.CTk):
         self.solar_tab =    solarTab(   self)
         self.layline_tab =  laylineTab( self)
         self.glyph_tab =    glyphTab(   self)
-        self.log_tab =      logTab(     self)
         # create the settings tab and pass GLYPH and MAIN instances
         self.settings_tab = settingsTab(self, self.glyph_tab, self)
+        self.help_tab =     helpTab(    self)
 
         self.tab_dict = {
             'solar'   : self.solar_tab,
             'layline' : self.layline_tab,
             'glyph'   : self.glyph_tab,
-            'log'     : self.log_tab,
-            'settings': self.settings_tab
+            'settings': self.settings_tab,
+            'help'    : self.help_tab
         }
 
 
@@ -134,8 +131,8 @@ class main(ctk.CTk):
 
         # check if user is clicking onto a DIFFERENT tab
         if tab != tab_target:
-            for page in [self.solar_tab, self.layline_tab, self.glyph_tab, self.log_tab, self.settings_tab]: # remove all page frames
-                page.grid_forget()                                                                           # ^
+            for page in [self.solar_tab, self.layline_tab, self.glyph_tab, self.settings_tab]: # remove all page frames
+                page.grid_forget()                                                             # ^
             dest_page = self.tab_dict[tab_target]          # get destination page from dict
             dest_page.grid(row=0,column=1, sticky='nsew')  # show the destination page
             tab = tab_target                               # set tab var
