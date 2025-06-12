@@ -173,8 +173,6 @@ class settingsTab(ctk.CTkFrame):
         # WIDGET CONFIG
         self.spacer = ctk.CTkLabel(self, text='', width=880, height=1)
         self.settings_title = ctk.CTkLabel(self, text='StarPath Settings', font=(nms,40), text_color=colors['light'])
-        self.dev_button = ctk.CTkButton(self, text='Developer Mode', font=(nms, 20), command=self.secret,
-                                           fg_color=colors['accent'], hover_color=colors['dark'], width=200, height=30)
         #
         general_settings = generalSettingsFrame(self, main_instance)
         glyph_settings = glyphSettingsFrame(self, glyphTab_instance)
@@ -182,17 +180,6 @@ class settingsTab(ctk.CTkFrame):
         # WIDGET PLACEMENT
         self.spacer.grid(        row=0,column=0, sticky='ew')
         self.settings_title.grid(row=1,column=0, padx=20,pady=20, sticky='nsew')
-        self.dev_button.grid(    row=4,column=0, padx=20,pady=00, sticky='n')
         #
         general_settings.grid(   row=2,column=0, padx=20,pady=10, sticky='nsew')
         glyph_settings.grid(     row=3,column=0, padx=20,pady=10, sticky='nsew')
-
-    def secret(self):
-        video_path = os.path.expanduser('~/Desktop/git/StarPath/Images/video.mp4')
-        if sys.platform == 'darwin':
-            import subprocess
-            subprocess.run(['open', video_path])
-        elif sys.platform == 'win32':
-            os.startfile(video_path)
-            # import pyautogui
-            # self.after(2000, lambda: pyautogui.press('space'))

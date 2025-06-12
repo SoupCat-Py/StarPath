@@ -1,9 +1,5 @@
 # libraries used in here
 import customtkinter as ctk     # GUI
-import tkinter as tk
-import os                       # system stuff
-from PIL import Image as image  # images
-import webbrowser as web        # opening wiki
 
 # import from other scripts
 from var_handler import *
@@ -13,8 +9,9 @@ from glyph import glyphTab
 from settings import settingsTab
 from help import helpTab
 
-# remember do make a folder in either User or AppData for images
-# then reroute there
+
+
+
 
 class sidebarFrame(ctk.CTkFrame):
     #initialization
@@ -92,9 +89,6 @@ class main(ctk.CTk):
         # main window config
         self.geometry('1080x720')
         self.resizable(False,False)
-        if sys.platform == 'win32':
-            import pywinstyles
-            pywinstyles.apply_style(self, 'acrylic')
         self.title('')
         
         # background
@@ -131,12 +125,13 @@ class main(ctk.CTk):
 
         # check if user is clicking onto a DIFFERENT tab
         if tab != tab_target:
-            for page in [self.solar_tab, self.layline_tab, self.glyph_tab, self.settings_tab]: # remove all page frames
+            for page in [*self.tab_dict.values()]:         # remove all page frames
                 page.grid_forget()                                                             # ^
             dest_page = self.tab_dict[tab_target]          # get destination page from dict
             dest_page.grid(row=0,column=1, sticky='nsew')  # show the destination page
             tab = tab_target                               # set tab var
             self.update_idletasks()                        # update window for faster refresh
+
 
 starpath = main()
 starpath.mainloop()

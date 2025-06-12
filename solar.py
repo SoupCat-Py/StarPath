@@ -12,16 +12,19 @@ def get(input):
     batteries = ceil(tpc*800/45000) # min batteries
 
     # get power generation
-    gen_sunrise = gen_sunset = panels * 82.5 * 25
+    gen_sunrise = gen_sunset = ( panels * 82.5 * 25 )
     gen_day     = panels * 835 * 50
     gen_night   = 0
     gen_total   = gen_sunrise + gen_sunset + gen_day + gen_night
 
-    total_generated = gen_total - tpc * 1000
-    total_required  = tpc * 800
-
-    power_diff = total_generated - total_required                 # difference between generated and required power
-    batteries_advised = batteries + round(power_diff / (835*50))  # advised amount of batteries
+    total_generated = (gen_total) - (tpc * 1000)
+    total_power_max = batteries * 45000
+    total_power_lost = total_generated - total_power_max
+    
+    if total_generated > total_power_max:
+        batteries_advised = batteries + ceil(total_power_lost / 45000)
+    else:
+        batteries_advised = None
 
     return panels, batteries, batteries_advised
 
@@ -49,7 +52,7 @@ class solarTab(ctk.CTkFrame):
         self.battery_indic_min = ctk.CTkLabel(self, text='———', font=(nms,30))
         self.battery_indic_adv = ctk.CTkLabel(self, text='———', font=(nms,30))
         #
-        self.dp_credit = ctk.CTkButton(self, text='Based on original code by Devilin Pixy', image=get_image('dp', 50,50), corner_radius=15,
+        self.dp_credit = ctk.CTkButton(self, text='Based on original code by Devilin Pixy', image=get_image('dp', 50,50), corner_radius=15, fg_color='#8c29e3', hover_color='#6d27ab',
                                        command = lambda: web.open_new_tab('https://jsfiddle.net/DevilinPixy/vm6k1woe/'))
         
         # widget placement
@@ -74,7 +77,7 @@ class solarTab(ctk.CTkFrame):
         # if it's a number, allow and calculate
         if input.isdigit() and int(input) <= 99999999999999999999:
             panels, batteries, batteries_adv = get(input) # calculate and get values
-            self.update_indics(str(panels), str(batteries), str(batteries_adv))
+            self.update_indics(str(panels), str(batteries), batteries_adv)
             return True
         # check for placeholder text
         elif input == 'power consumption (kPs)':
@@ -92,7 +95,7 @@ class solarTab(ctk.CTkFrame):
         self.battery_indic_adv.configure(text=bat_adv)
 
         # check for adv
-        if bat == bat_adv:
+        if bat_adv is None:
             #hide adv
             self.battery_label_adv.grid_forget()
             self.battery_indic_adv.grid_forget()
