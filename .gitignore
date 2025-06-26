@@ -3,3 +3,6 @@ plan.md
 __pycache__/
 log.json
 emoji_presets.txt
+build/
+dist/
+StarPath.spec
